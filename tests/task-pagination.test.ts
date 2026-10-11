@@ -31,6 +31,34 @@ describe("Task pagination API", () => {
     expect(response.body.items).toEqual([]);
     expect(response.body.total).toBe(25);
   });
+  
+  it("accepts the minimum limit", async () => {
+    const response = await request(app).get("/tasks?limit=1");
+
+    expect(response.status).toBe(200);
+    expect(response.body.items).toHaveLength(1);
+  });
+
+  it("accepts the maximum limit", async () => {
+    const response = await request(app).get("/tasks?limit=100");
+
+    expect(response.status).toBe(200);
+    expect(response.body.items).toHaveLength(25);
+  });
+
+  it.each([
+    "offset=-1",
+    "limit=abc",
+    "limit=1e1",
+    "offset=0x10",
+    "offset=",
+    "limit=1&limit=2",
+  ])("rejects malformed or invalid query: %s", async (query) => {
+    const response = await request(app).get(`/tasks?${query}`);
+
+    expect(response.status).toBe(400);
+  });
+
 
   it.each([
     ["zero limit", "limit=0"],
