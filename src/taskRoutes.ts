@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createTask, getTasks } from "./tasks.js";
+import { completeTask, createTask, getTasks } from "./tasks.js";
 
 const router = Router();
 
@@ -30,6 +30,27 @@ router.post("/", (req, res) => {
   const task = createTask(normalizedTitle);
 
   return res.status(201).json(task);
+});
+
+
+router.patch("/:id/complete", (req, res) => {
+  const id = Number(req.params.id);
+
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({
+      error: "Task ID must be a positive integer",
+    });
+  }
+
+  const task = completeTask(id);
+
+  if (!task) {
+    return res.status(404).json({
+      error: "Task not found",
+    });
+  }
+
+  return res.status(200).json(task);
 });
 
 router.get("/", (_req, res) => {

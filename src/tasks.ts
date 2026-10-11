@@ -27,3 +27,15 @@ export function resetTasks(): void {
   tasks.length = 0;
   nextId = 1;
 }
+
+export function completeTask(id: number): Task | undefined {
+  const task = tasks.find((task) => task.id === id);
+
+  if (!task) {
+    return undefined;
+  }
+
+  task.completed = true;
+  return { ...task };
+}
+
