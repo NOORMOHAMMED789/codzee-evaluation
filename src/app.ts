@@ -1,4 +1,5 @@
 import express from "express";
+import taskRoutes from "./taskRoutes.js";
 
 const app = express();
 
@@ -10,5 +11,8 @@ app.get("/health", (_req, res) => {
     service: "codzee-evaluation",
   });
 });
+
+app.use("/tasks", taskRoutes);
+
 
 export default app;
