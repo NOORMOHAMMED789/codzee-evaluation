@@ -1,3 +1,4 @@
+
 export interface Task {
   id: number;
   title: string;
@@ -15,9 +16,14 @@ export function createTask(title: string): Task {
   };
 
   tasks.push(task);
-  return task;
+  return { ...task };
 }
 
 export function getTasks(): Task[] {
-  return tasks;
+  return tasks.map((task) => ({ ...task }));
+}
+
+export function resetTasks(): void {
+  tasks.length = 0;
+  nextId = 1;
 }
